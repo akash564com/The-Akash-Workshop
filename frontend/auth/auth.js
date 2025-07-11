@@ -144,4 +144,17 @@ firebase.auth().onAuthStateChanged((user) => {
     window.location.href = "/login.html";
   }
 });
-
+ firebase.auth().onAuthStateChanged(user => {
+      if (!user) {
+        window.location.href = "/login.html";
+      } else {
+        const info = document.getElementById("userInfo");
+        if (info) {
+          info.innerText =
+            user.displayName ||
+            user.email ||
+            user.phoneNumber ||
+            "Logged in";
+        }
+      }
+    });
