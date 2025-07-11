@@ -1,12 +1,14 @@
 // ✅ Firebase Config
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT.firebaseapp.com",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_PROJECT.appspot.com",
-  messagingSenderId: "SENDER_ID",
-  appId: "APP_ID"
+  apiKey: "AIzaSyDfXVdbqq-FdTd6oyymyydHDx9dSG9rGrE",
+  authDomain: "the-akash-workshop.firebaseapp.com",
+  projectId: "the-akash-workshop",
+  storageBucket: "the-akash-workshop.appspot.com",
+  messagingSenderId: "923020459137",
+  appId: "1:923020459137:web:7ff57fb60ae8342d7ea180",
+  measurementId: "G-7DG0LD185G"
 };
+
 
 // ✅ Initialize Firebase
 firebase.initializeApp(firebaseConfig);
