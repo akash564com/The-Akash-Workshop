@@ -1,4 +1,4 @@
-from flask import Flask, request, send_file, send_from_directory
+from flask import Flask, request, send_file, send_from_directory, jsonify
 from werkzeug.utils import secure_filename
 from generate_certificate import CertificateGenerator
 from resume_pdf_generator import ResumePDF
@@ -7,7 +7,7 @@ import os
 import zipfile
 import uuid
 import shutil
-
+import fitz  # PyMuPDF
 # Get absolute frontend folder for static serve
 frontend_folder = os.path.abspath(os.path.join(os.path.dirname(__file__), '../frontend'))
 app = Flask(__name__, static_folder=frontend_folder, static_url_path='/')
@@ -104,31 +104,32 @@ def generate_resume():
     resume.generate(filepath)
 
     return send_file(filepath, mimetype='application/pdf', as_attachment=True, download_name="resume.pdf")
+app = Flask(__name__)
+UPLOAD_FOLDER = "uploads"
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
-@app.route('/compress-pdf', methods=['POST'])
-def compress_pdf_route():
-    if 'pdf' not in request.files:
-        return "No PDF uploaded", 400
+@app.route("/compress", methods=["POST"])
+def compress_pdf():
+    try:
+        if 'pdf' not in request.files:
+            return jsonify({"error": "No file uploaded"}), 400
 
-    pdf_file = request.files['pdf']
-    filename = secure_filename(pdf_file.filename)
+        pdf = request.files['pdf']
+        input_path = os.path.join(UPLOAD_FOLDER, pdf.filename)
+        pdf.save(input_path)
 
-    uploads_folder = 'uploads'
-    compressed_folder = 'compressed'
-    os.makedirs(uploads_folder, exist_ok=True)
-    os.makedirs(compressed_folder, exist_ok=True)
+        # Use PyMuPDF to compress
+        doc = fitz.open(input_path)
+        for page in doc:
+            page.compress()
+        compressed_path = os.path.join(UPLOAD_FOLDER, f"compressed_{pdf.filename}")
+        doc.save(compressed_path)
+        doc.close()
 
-    input_path = os.path.join(uploads_folder, filename)
-    output_path = os.path.join(compressed_folder, f"compressed_{filename}")
+        return jsonify({"success": True, "download": f"/{compressed_path}"})
 
-    # Save the uploaded file
-    pdf_file.save(input_path)
-
-    # Compress it
-    compress_pdf(input_path, output_path)
-
-    return send_file(output_path, mimetype='application/pdf', as_attachment=True, download_name="compressed.pdf")
-
+    except Exception as e:
+        return jsonify({"error": f"Compression failed: {str(e)}"}), 500
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
