@@ -1,0 +1,47 @@
+<!-- File: frontend/login.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login | The Akash Workshop</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyDfXVdbqq-FdTd6oyymyydHDx9dSG9rGrE",
+      authDomain: "the-akash-workshop.firebaseapp.com",
+      projectId: "the-akash-workshop",
+      storageBucket: "the-akash-workshop.firebasestorage.app",
+      messagingSenderId: "923020459137",
+      appId: "1:923020459137:web:7ff57fb60ae8342d7ea180",
+      measurementId: "G-7DG0LD185G"
+    };
+    firebase.initializeApp(firebaseConfig);
+  </script>
+</head>
+<body class="bg-gray-100 text-gray-800 p-4">
+  <div class="max-w-md mx-auto bg-white p-6 rounded-lg shadow">
+    <h1 class="text-2xl font-bold text-center mb-6">🔐 Login</h1>
+
+    <label class="block font-medium">📱 Phone Number (+91...)</label>
+    <input type="tel" id="phoneInput" placeholder="+91..." class="w-full border rounded p-2 mb-3" />
+
+    <div id="recaptcha-container" class="mb-3"></div>
+    <button id="sendOtpBtn" class="bg-blue-600 text-white w-full py-2 rounded hover:bg-blue-700">Send OTP</button>
+
+    <input type="text" id="otpInput" placeholder="Enter OTP" class="w-full border rounded p-2 mt-3 mb-3 hidden"/>
+    <button id="verifyOtpBtn" class="bg-green-600 text-white w-full py-2 rounded hover:bg-green-700 hidden">Verify OTP</button>
+
+    <div class="text-center my-4 text-gray-500">OR</div>
+
+    <button id="googleLoginBtn" class="bg-red-600 text-white w-full py-2 rounded hover:bg-red-700">Login with Google</button>
+  </div>
+
+  <script src="/auth/auth.js"></script>
+</body>
+</html>
