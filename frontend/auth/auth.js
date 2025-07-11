@@ -1,4 +1,4 @@
-// ✅ 1. Firebase Config
+// 🔐 Firebase Config (same as login.html)
 const firebaseConfig = {
   apiKey: "AIzaSyDfXVdbqq-FdTd6oyymyydHDx9dSG9rGrE",
   authDomain: "the-akash-workshop.firebaseapp.com",
@@ -8,7 +8,10 @@ const firebaseConfig = {
   appId: "1:923020459137:web:7ff57fb60ae8342d7ea180",
   measurementId: "G-7DG0LD185G"
 };
+
+// ✅ Initialize Firebase here (again is fine)
 firebase.initializeApp(firebaseConfig);
+
 
 // ✅ 2. Setup Recaptcha
 const recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
