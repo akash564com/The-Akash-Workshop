@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>All-In-One Tools</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+  <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
+  <script src="/firebase/firebase-config.js"></script>
+</head>
+<body class="bg-gradient-to-br from-gray-900 via-slate-800 to-gray-900 text-white min-h-screen flex items-center justify-center p-4">
+
+  <div class="max-w-xl w-full bg-white rounded-2xl shadow-xl p-8 text-gray-900">
+    <h1 class="text-3xl font-extrabold mb-2 text-center">🚀 All-in-One Tools</h1>
+    <p class="text-center text-gray-600 mb-6">Smart tools for smart people — in one place.</p>
+
+    <!-- 📱 Phone OTP Login -->
+    <div class="mb-4">
+      <input id="phone" type="text" placeholder="+91XXXXXXXXXX" class="w-full p-3 border rounded-lg mb-2" />
+      <div id="recaptcha-container"></div>
+      <button onclick="sendOTP()" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg">Send OTP</button>
+    </div>
+
+    <div class="mb-4">
+      <input id="otp" type="text" placeholder="Enter OTP" class="w-full p-3 border rounded-lg mb-2" />
+      <button onclick="verifyOTP()" class="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg">Verify OTP</button>
+    </div>
+
+    <div class="text-center my-4 text-sm text-gray-500">— OR —</div>
+
+    <!-- 🔐 Google Sign-In -->
+    <button onclick="googleLogin()" class="w-full bg-red-500 hover:bg-red-600 text-white py-2 rounded-lg flex items-center justify-center gap-2">
+      <img src="https://www.svgrepo.com/show/355037/google.svg" class="h-5 w-5" alt="Google" />
+      Sign in with Google
+    </button>
+
+    <p class="text-center text-xs text-gray-400 mt-6">Made with ❤️ by ToolLoop</p>
+  </div>
+
+  <script>
+    window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
+      size: 'normal',
+      callback: function(response) {
+        // reCAPTCHA solved
+      }
+    });
+  </script>
+</body>
+</html>

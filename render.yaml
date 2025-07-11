@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: The-Akash-Workshop
+    env: python
+    plan: free
+    buildCommand: ""
+    startCommand: python backend/app.py
+    envVars:
+      - key: PORT
+        value: 10000

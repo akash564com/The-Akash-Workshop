@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard | All-In-One Tools</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+</head>
+<body class="bg-gray-100 text-gray-800 min-h-screen p-6">
+
+  <!-- ✅ Header -->
+  <header class="flex justify-between items-center mb-6">
+    <h1 class="text-2xl font-bold">🎯 Welcome to All-in-One Tools</h1>
+    <button onclick="logout()" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">Logout</button>
+  </header>
+
+  <!-- ✅ Tools Grid -->
+  <div class="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+    <!-- 🔧 Tool Card -->
+    <a href="/tools/pdf-compressor.html" class="bg-white shadow p-6 rounded-lg hover:shadow-lg transition">
+      <h2 class="text-xl font-semibold mb-2">📄 PDF Compressor</h2>
+      <p class="text-gray-600 text-sm">Compress PDF files quickly and easily.</p>
+    </a>
+
+    <a href="/tools/resume-builder.html" class="bg-white shadow p-6 rounded-lg hover:shadow-lg transition">
+      <h2 class="text-xl font-semibold mb-2">📝 Resume Builder</h2>
+      <p class="text-gray-600 text-sm">Create professional resumes in minutes.</p>
+    </a>
+
+    <a href="/tools/certificate-generator.html" class="bg-white shadow p-6 rounded-lg hover:shadow-lg transition">
+      <h2 class="text-xl font-semibold mb-2">🎓 Certificate Generator</h2>
+      <p class="text-gray-600 text-sm">Generate certificates from CSV files.</p>
+    </a>
+
+    <a href="/tools/image-generator.html" class="bg-white shadow p-6 rounded-lg hover:shadow-lg transition">
+      <h2 class="text-xl font-semibold mb-2">🎨 AI Image Generator</h2>
+      <p class="text-gray-600 text-sm">Generate images using AI prompts.</p>
+    </a>
+
+    <a href="/tools/background-remover.html" class="bg-white shadow p-6 rounded-lg hover:shadow-lg transition">
+      <h2 class="text-xl font-semibold mb-2">🔍 Background Remover</h2>
+      <p class="text-gray-600 text-sm">Remove image backgrounds in 1 click.</p>
+    </a>
+
+    <a href="/tools/youtube-thumbnail.html" class="bg-white shadow p-6 rounded-lg hover:shadow-lg transition">
+      <h2 class="text-xl font-semibold mb-2">📺 YouTube Thumbnail Downloader</h2>
+      <p class="text-gray-600 text-sm">Download thumbnails by YouTube link.</p>
+    </a>
+  </div>
+
+  <!-- ✅ Logout Script -->
+  <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
+  <script src="/firebase/firebase-config.js"></script>
+  <script>
+    function logout() {
+      firebase.auth().signOut().then(() => {
+        window.location.href = "/";
+      });
+    }
+  </script>
+</body>
+</html>
