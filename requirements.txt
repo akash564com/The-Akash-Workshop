@@ -3,3 +3,4 @@ fpdf
 pillow
 firebase-admin
 PyMuPDF
+gunicorn
