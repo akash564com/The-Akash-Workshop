@@ -1,75 +1,22 @@
-// Initialize Recaptcha
-const recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
-  size: 'invisible',
-  callback: () => {
-    console.log("Recaptcha verified");
-  }
-});
+// ✅ 1. Firebase Config
+const firebaseConfig = {
+  apiKey: "AIzaSyDfXVdbqq-FdTd6oyymyydHDx9dSG9rGrE",
+  authDomain: "the-akash-workshop.firebaseapp.com",
+  projectId: "the-akash-workshop",
+  storageBucket: "the-akash-workshop.firebasestorage.app",
+  messagingSenderId: "923020459137",
+  appId: "1:923020459137:web:7ff57fb60ae8342d7ea180",
+  measurementId: "G-7DG0LD185G"
+};
+firebase.initializeApp(firebaseConfig);
 
-// Elements
-const phoneInput = document.getElementById("phoneInput");
-const sendOtpBtn = document.getElementById("sendOtpBtn");
-const otpInput = document.getElementById("otpInput");
-const verifyOtpBtn = document.getElementById("verifyOtpBtn");
-const googleLoginBtn = document.getElementById("googleLoginBtn");
-
-// Step 1: Send OTP
-sendOtpBtn.addEventListener("click", async () => {
-  const phoneNumber = phoneInput.value.trim();
-  if (!phoneNumber.startsWith("+91")) {
-    alert("Use +91 format for Indian numbers");
-    return;
-  }
-
-  try {
-    const confirmation = await firebase.auth().signInWithPhoneNumber(phoneNumber, recaptchaVerifier);
-    window.confirmationResult = confirmation;
-
-    otpInput.classList.remove("hidden");
-    verifyOtpBtn.classList.remove("hidden");
-    alert("✅ OTP sent to " + phoneNumber);
-  } catch (err) {
-    alert("❌ OTP Error: " + err.message);
-  }
-});
-
-// Step 2: Verify OTP
-verifyOtpBtn.addEventListener("click", async () => {
-  const otpCode = otpInput.value.trim();
-  if (otpCode.length !== 6) {
-    alert("OTP must be 6 digits");
-    return;
-  }
-
-  try {
-    const result = await window.confirmationResult.confirm(otpCode);
-    const user = result.user;
-    alert("✅ Logged in: " + user.phoneNumber);
-    window.location.href = "/"; // Redirect to homepage or dashboard
-  } catch (err) {
-    alert("❌ OTP Invalid: " + err.message);
-  }
-});
-
-// Step 3: Google Login
-googleLoginBtn.addEventListener("click", async () => {
-  const provider = new firebase.auth.GoogleAuthProvider();
-  try {
-    const result = await firebase.auth().signInWithPopup(provider);
-    const user = result.user;
-    alert("✅ Google Login: " + user.displayName);
-    window.location.href = "/"; // Redirect to homepage or dashboard
-  } catch (err) {
-    alert("❌ Google Login Error: " + err.message);
-  }
-});
-// Firebase Recaptcha for OTP
+// ✅ 2. Setup Recaptcha
 const recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
   size: 'invisible',
   callback: () => console.log("Recaptcha verified")
 });
 
-// Elements (for login.html only)
+// ✅ 3. Elements
 const phoneInput = document.getElementById("phoneInput");
 const sendOtpBtn = document.getElementById("sendOtpBtn");
 const otpInput = document.getElementById("otpInput");
@@ -77,6 +24,7 @@ const verifyOtpBtn = document.getElementById("verifyOtpBtn");
 const googleLoginBtn = document.getElementById("googleLoginBtn");
 const logoutBtn = document.getElementById("logoutBtn");
 
+// ✅ 4. Send OTP
 if (sendOtpBtn) {
   sendOtpBtn.addEventListener("click", async () => {
     const phoneNumber = phoneInput.value.trim();
@@ -94,6 +42,7 @@ if (sendOtpBtn) {
   });
 }
 
+// ✅ 5. Verify OTP
 if (verifyOtpBtn) {
   verifyOtpBtn.addEventListener("click", async () => {
     const code = otpInput.value.trim();
@@ -109,6 +58,7 @@ if (verifyOtpBtn) {
   });
 }
 
+// ✅ 6. Google Login
 if (googleLoginBtn) {
   googleLoginBtn.addEventListener("click", async () => {
     try {
@@ -124,7 +74,7 @@ if (googleLoginBtn) {
   });
 }
 
-// Logout (optional button in header or tools)
+// ✅ 7. Logout
 if (logoutBtn) {
   logoutBtn.addEventListener("click", () => {
     firebase.auth().signOut().then(() => {
@@ -135,26 +85,17 @@ if (logoutBtn) {
   });
 }
 
-// Protect tool pages
-firebase.auth().onAuthStateChanged((user) => {
-  const protectedPages = ["/tools/", "/dashboard.html"]; // add protected paths
-  const onProtectedPage = protectedPages.some(path => window.location.pathname.startsWith(path));
+// ✅ 8. Protect Pages
+firebase.auth().onAuthStateChanged(user => {
+  const protectedPaths = ["/tools/", "/dashboard.html"];
+  const onProtectedPage = protectedPaths.some(path => window.location.pathname.startsWith(path));
 
   if (onProtectedPage && !user) {
     window.location.href = "/login.html";
   }
+
+  const info = document.getElementById("userInfo");
+  if (info && user) {
+    info.innerText = user.displayName || user.email || user.phoneNumber || "Logged in";
+  }
 });
- firebase.auth().onAuthStateChanged(user => {
-      if (!user) {
-        window.location.href = "/login.html";
-      } else {
-        const info = document.getElementById("userInfo");
-        if (info) {
-          info.innerText =
-            user.displayName ||
-            user.email ||
-            user.phoneNumber ||
-            "Logged in";
-        }
-      }
-    });
