@@ -1,71 +1,54 @@
-// 🔐 Firebase Config (same as login.html)
+// ✅ Firebase Config
 const firebaseConfig = {
   apiKey: "AIzaSyDfXVdbqq-FdTd6oyymyydHDx9dSG9rGrE",
   authDomain: "the-akash-workshop.firebaseapp.com",
   projectId: "the-akash-workshop",
-  storageBucket: "the-akash-workshop.firebasestorage.app",
+  storageBucket: "the-akash-workshop.appspot.com",
   messagingSenderId: "923020459137",
   appId: "1:923020459137:web:7ff57fb60ae8342d7ea180",
   measurementId: "G-7DG0LD185G"
 };
 
-// ✅ Initialize Firebase here (again is fine)
 firebase.initializeApp(firebaseConfig);
 
-
-// ✅ 2. Setup Recaptcha
-const recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
-  size: 'invisible',
-  callback: () => console.log("Recaptcha verified")
-});
-
-// ✅ 3. Elements
-const phoneInput = document.getElementById("phoneInput");
-const sendOtpBtn = document.getElementById("sendOtpBtn");
-const otpInput = document.getElementById("otpInput");
-const verifyOtpBtn = document.getElementById("verifyOtpBtn");
+// ✅ Elements
+const emailInput = document.getElementById("emailInput");
+const passwordInput = document.getElementById("passwordInput");
+const loginBtn = document.getElementById("loginBtn");
+const registerBtn = document.getElementById("registerBtn");
 const googleLoginBtn = document.getElementById("googleLoginBtn");
 const logoutBtn = document.getElementById("logoutBtn");
 
-// ✅ 4. Send OTP
-if (sendOtpBtn) {
-  sendOtpBtn.addEventListener("click", async () => {
-    const phoneNumber = phoneInput.value.trim();
-    if (!phoneNumber.startsWith("+91")) return alert("Use +91 format");
-
+// ✅ Email/Password Login
+if (loginBtn) {
+  loginBtn.addEventListener("click", async () => {
     try {
-      const confirmation = await firebase.auth().signInWithPhoneNumber(phoneNumber, recaptchaVerifier);
-      window.confirmationResult = confirmation;
-      otpInput.classList.remove("hidden");
-      verifyOtpBtn.classList.remove("hidden");
-      alert("✅ OTP sent!");
-    } catch (err) {
-      alert("❌ OTP Error: " + err.message);
-    }
-  });
-}
-
-// ✅ 5. Verify OTP
-if (verifyOtpBtn) {
-  verifyOtpBtn.addEventListener("click", async () => {
-    const code = otpInput.value.trim();
-    try {
-      const result = await window.confirmationResult.confirm(code);
-      const user = result.user;
-      localStorage.setItem("user", JSON.stringify(user));
-      alert("✅ Logged in as " + user.phoneNumber);
+      await firebase.auth().signInWithEmailAndPassword(emailInput.value, passwordInput.value);
+      alert("✅ Login successful");
       window.location.href = "/";
     } catch (err) {
-      alert("❌ Invalid OTP: " + err.message);
+      alert("❌ Login Failed: " + err.message);
     }
   });
 }
 
-// ✅ 6. Google Login
+// ✅ Register New Account
+if (registerBtn) {
+  registerBtn.addEventListener("click", async () => {
+    try {
+      await firebase.auth().createUserWithEmailAndPassword(emailInput.value, passwordInput.value);
+      alert("✅ Registered successfully!");
+    } catch (err) {
+      alert("❌ Registration Failed: " + err.message);
+    }
+  });
+}
+
+// ✅ Google Sign-in
 if (googleLoginBtn) {
   googleLoginBtn.addEventListener("click", async () => {
+    const provider = new firebase.auth.GoogleAuthProvider();
     try {
-      const provider = new firebase.auth.GoogleAuthProvider();
       const result = await firebase.auth().signInWithPopup(provider);
       const user = result.user;
       localStorage.setItem("user", JSON.stringify(user));
@@ -77,7 +60,7 @@ if (googleLoginBtn) {
   });
 }
 
-// ✅ 7. Logout
+// ✅ Logout
 if (logoutBtn) {
   logoutBtn.addEventListener("click", () => {
     firebase.auth().signOut().then(() => {
@@ -88,7 +71,7 @@ if (logoutBtn) {
   });
 }
 
-// ✅ 8. Protect Pages
+// ✅ Protect Pages + Show Logged-in Info
 firebase.auth().onAuthStateChanged(user => {
   const protectedPaths = ["/tools/", "/dashboard.html"];
   const onProtectedPage = protectedPaths.some(path => window.location.pathname.startsWith(path));
@@ -99,6 +82,6 @@ firebase.auth().onAuthStateChanged(user => {
 
   const info = document.getElementById("userInfo");
   if (info && user) {
-    info.innerText = user.displayName || user.email || user.phoneNumber || "Logged in";
+    info.innerText = user.displayName || user.email || "Logged in";
   }
 });
